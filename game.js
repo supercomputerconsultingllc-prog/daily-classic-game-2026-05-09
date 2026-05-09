@@ -81,13 +81,29 @@ const input = {
   pointerX: WIDTH / 2
 };
 
+function safeReadBestScore() {
+  try {
+    return Number(window.localStorage.getItem("neonBreakerBest") || 0);
+  } catch {
+    return 0;
+  }
+}
+
+function safeWriteBestScore(value) {
+  try {
+    window.localStorage.setItem("neonBreakerBest", String(value));
+  } catch {
+    // Ignore storage failures for file:// or restricted webview contexts.
+  }
+}
+
 const state = {
   mode: "loading",
   score: 0,
   lives: 3,
   level: 0,
   combo: 1,
-  best: Number(localStorage.getItem("neonBreakerBest") || 0),
+  best: safeReadBestScore(),
   runningAction: null,
   slowUntil: 0,
   expandUntil: 0,
@@ -164,7 +180,7 @@ function syncHud() {
 function setBestScore() {
   if (state.score > state.best) {
     state.best = state.score;
-    localStorage.setItem("neonBreakerBest", String(state.best));
+    safeWriteBestScore(state.best);
   }
 }
 
@@ -737,6 +753,8 @@ startButton.addEventListener("click", () => {
   ensureAudio();
   if (state.runningAction) {
     state.runningAction();
+  } else {
+    startNewGame();
   }
 });
 
