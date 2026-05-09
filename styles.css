@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0d0d0d;
+}
+
+canvas {
+  border: 2px solid #efefef;
+  image-rendering: pixelated;
+}
